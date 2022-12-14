@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>画板</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        body{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+</body>
+<script>
+    let canvans = document.querySelector('#canvas');
+    //获取屏幕宽度
+    canvans.width = document.documentElement.clientWidth
+    canvans.height = document.documentElement.clientHeight
+    let ctx = canvans.getContext('2d');
+    let painting;
+    //鼠标相关事件
+    canvans.onmousedown = (event) => {
+        painting = true;
+    }
+    canvans.onmouseup  = (event) => {
+        painting = false;
+    }
+    //触摸相关事件
+    canvans.ontouchstart = (event) => {
+        painting = true;
+    }
+    canvans.ontouchend  = (event) => {
+        painting = false;
+    }
+    //鼠标移动
+    canvans.onmousemove = (event) => {
+        if(painting){
+            //获取鼠标位置
+            const x = event.x;
+            const y = event.y;
+            console.log(x,y);
+            ctx.beginPath();
+            ctx.arc(x, y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    };
+    //手势移动
+    canvans.ontouchmove = (evnet) => {
+        const x = event.touches[0].clientX;
+        const y = event.touches[0].clientY;
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+        console.log(event);
+    }    
+</script>
+</html>
