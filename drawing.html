@@ -25,10 +25,17 @@
     canvans.width = document.documentElement.clientWidth
     canvans.height = document.documentElement.clientHeight
     let ctx = canvans.getContext('2d');
+    ctx.lineWidth = 10;
+    ctx.lineCap= 'round';
     let painting;
+    let lastX;
+    let lastY;
     //鼠标相关事件
     canvans.onmousedown = (event) => {
         painting = true;
+        console.log(event);
+        lastX = event.clientX;
+        lastY = event.clientY;
     }
     canvans.onmouseup  = (event) => {
         painting = false;
@@ -36,6 +43,8 @@
     //触摸相关事件
     canvans.ontouchstart = (event) => {
         painting = true;
+        lastX = event.x;
+        lastY = event.y;
     }
     canvans.ontouchend  = (event) => {
         painting = false;
@@ -43,13 +52,14 @@
     //鼠标移动
     canvans.onmousemove = (event) => {
         if(painting){
-            //获取鼠标位置
             const x = event.x;
             const y = event.y;
-            console.log(x,y);
             ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.moveTo(lastX,lastY);
+            ctx.lineTo(x,y);
+            ctx.stroke();
+            lastX = x;
+            lastY = y;
         }
     };
     //手势移动
@@ -57,9 +67,11 @@
         const x = event.touches[0].clientX;
         const y = event.touches[0].clientY;
         ctx.beginPath();
-        ctx.arc(x, y, 5, 0, 2 * Math.PI);
-        ctx.fill();
-        console.log(event);
+        ctx.moveTo(lastX,lastY);
+        ctx.lineTo(x,y);
+        ctx.stroke();
+        lastX = x;
+        lastY = y;
     }    
 </script>
 </html>
